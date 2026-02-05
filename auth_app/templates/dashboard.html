@@ -1,0 +1,46 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>Dashboard: {{ request.user.username }}</h1>
+<a href="{% url 'logout' %}" class="btn btn-dark">Logout</a>
+
+<hr>
+
+<h2>My To-Do List</h2>
+
+<form method="POST" action="">
+  {% csrf_token %}
+  <input type="text" name="task" placeholder="Add new task">
+  <button type="submit">Add Task</button>
+</form>
+
+<!-- dashboard.html -->
+<div id="todo-list">
+  {% for todo in todos %}
+    <div class="todo-item {% if todo.completed %}completed{% endif %}">
+      <span class="task">{{ todo.title }}</span>
+      <a href="{% url 'toggle_complete' todo.id %}">✔</a>
+      <a href="{% url 'delete_todo' todo.id %}">🗑</a>
+    </div>
+  {% empty %}
+    <p>No tasks yet!</p>
+  {% endfor %}
+</div>
+
+<!-- Include your CSS & JS -->
+<link rel="stylesheet" href="{% static 'todo/css/style.css' %}">
+<script src="{% static 'todo/js/script.js' %}"></script>
+ <style>
+        body {
+            background: linear-gradient(135deg, #9fcfcb, #54a98c);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: "Poppins", sans-serif;
+            color: #fff;
+        }
+</style>
+
+{% endblock %}
